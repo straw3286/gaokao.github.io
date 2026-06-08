@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>内卷即高分？ · 完整报道</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: #000;
+    }
+
+    body {
+      background: #000;
+    }
+
+    .section-frame {
+      display: block;
+      width: 100%;
+      border: none;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* 游戏板块：滚到此处固定全屏 */
+    .game-section {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .game-section.is-pinned .game-pin {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: #000;
+    }
+
+    .game-section.is-pinned .game-pin iframe {
+      width: 100%;
+      height: 100vh !important;
+      min-height: 100vh;
+    }
+
+    .game-section:not(.is-pinned) .game-pin iframe {
+      min-height: 100vh;
+    }
+
+    html.game-locked,
+    body.game-locked {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="frame-intro" class="section-frame" src="引言/index.html" title="引言" scrolling="no"></iframe>
+
+  <div id="game-section" class="game-section">
+    <div id="game-pin" class="game-pin">
+      <iframe id="frame-game" class="section-frame" src="简易交互小游戏/index.html" title="高考人生模拟器" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <iframe id="frame-part1" class="section-frame" src="part1/index.html" title="第一部分" scrolling="no" tabindex="-1"></iframe>
+  <iframe id="frame-part2" class="section-frame" src="part2/index.html" title="第二部分" scrolling="no"></iframe>
+  <iframe id="frame-part3" class="section-frame" src="part3/index.html" title="第三部分" scrolling="no"></iframe>
+  <iframe id="frame-part4" class="section-frame" src="part4/index.html" title="第四部分" scrolling="no"></iframe>
+
+  <script src="merge.js"></script>
+</body>
+</html>

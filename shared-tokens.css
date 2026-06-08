@@ -1,0 +1,53 @@
+:root {
+  --fs-hero-part: 58px;
+  --fs-hero-title: 40px;
+  --fs-hero-sub: 22px;
+  --fs-body: 17px;
+  --fs-section-lead: 20px;
+  --fs-quote: 19px;
+  --fs-chart-legend: 14px;
+  --fs-chart-title: 15px;
+  --lh-body: 2;
+  --lh-tight: 1.35;
+  --max-w: 960px;
+  --pad-x: 28px;
+  --chart-h: 400px;
+  --chart-h-bar: 720px;
+  --img-h: 220px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-hero-part: 42px;
+    --fs-hero-title: 30px;
+    --fs-hero-sub: 18px;
+    --fs-body: 16px;
+    --fs-section-lead: 18px;
+    --fs-quote: 17px;
+    --chart-h-bar: 900px;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --fs-hero-part: 36px;
+    --fs-hero-title: 26px;
+    --fs-hero-sub: 16px;
+  }
+}
+
+/* 正文换行优化，减少孤字断行 */
+p,
+li,
+.intro,
+.policy,
+.closing,
+.question,
+.outro,
+.analysis,
+.footer-text,
+.text-block p,
+.factor-text p,
+.conclusion-text p {
+  text-wrap: pretty;
+}

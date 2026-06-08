@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第一部分 作息内卷的地域分化</title>
+  <link rel="stylesheet" href="../shared-tokens.css" />
+  <script src="../part3/js/vendor/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --text: #e8e8e8;
+      --muted: #d4d4d4;
+      --red: #ff4d4f;
+      --red-soft: #ff6b6b;
+      --blue: #6ec8ff;
+      --blue-soft: #8ed4ff;
+      --card: #141414;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--pad-x) 40px;
+    }
+
+    /* Header */
+    .hero {
+      position: relative;
+      min-height: 480px;
+      margin: 0 calc(var(--pad-x) * -1) 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 56px 36px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url("assets/bg1.png") center / cover no-repeat;
+      filter: brightness(1.18) saturate(1.05) contrast(1.08);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.12) 100%);
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-label {
+      font-size: var(--fs-hero-part);
+      letter-spacing: 0.12em;
+      color: #fff;
+      margin-bottom: 20px;
+      font-weight: 700;
+      line-height: var(--lh-tight);
+    }
+
+    .hero-title {
+      font-size: var(--fs-hero-title);
+      font-weight: 700;
+      line-height: var(--lh-tight);
+      margin-bottom: 22px;
+      letter-spacing: 0.1em;
+      color: #fff;
+    }
+
+    .hero-sub {
+      font-size: var(--fs-hero-sub);
+      color: rgba(255,255,255,0.92);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      line-height: 1.6;
+    }
+
+    /* Intro */
+    .intro {
+      padding: 0 0 40px;
+      text-align: center;
+      font-size: var(--fs-body);
+      color: var(--muted);
+      line-height: var(--lh-body);
+    }
+
+    .intro .hl-red {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .intro p + p { margin-top: 14px; }
+
+    /* Map section */
+    .map-section {
+      padding: 0 0 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .map-section { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    .map-wrap {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #111;
+    }
+
+    #chart-map {
+      width: 100%;
+      height: var(--chart-h);
+    }
+
+    .map-caption {
+      text-align: center;
+      font-size: var(--fs-chart-legend);
+      color: #999;
+      margin-top: 8px;
+    }
+
+    .stats {
+      font-size: var(--fs-body);
+      color: #d0d0d0;
+      padding: 4px 0 0 4px;
+      line-height: var(--lh-body);
+    }
+
+    .stats ul {
+      list-style: none;
+    }
+
+    .stats li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 18px;
+    }
+
+    .stats li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #666;
+    }
+
+    .stats .em-red { color: var(--red); font-weight: 600; }
+    .stats .em-blue { color: var(--blue); font-weight: 600; }
+
+    /* Compare columns */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      padding: 28px 0 12px;
+    }
+
+    .col {
+      padding: 16px 0;
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+      color: #d0d0d0;
+    }
+
+    .col-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--fs-section-lead);
+      font-weight: 700;
+      margin-bottom: 16px;
+      white-space: nowrap;
+    }
+
+    .col-title img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .col-top .col-title { color: var(--red); }
+    .col-bottom .col-title { color: var(--blue); }
+
+    .col-top .em { color: var(--red-soft); font-weight: 600; }
+    .col-bottom .em { color: var(--blue-soft); font-weight: 600; }
+
+    .col p + p { margin-top: 10px; }
+
+    /* Pictogram */
+    .picto-section {
+      padding: 32px 0 16px;
+    }
+
+    .picto-title {
+      font-size: var(--fs-section-lead);
+      font-weight: 600;
+      text-align: left;
+      line-height: var(--lh-body);
+      margin-bottom: 24px;
+    }
+
+    .picto-body {
+      width: 100%;
+      overflow: visible;
+    }
+
+    .picto-row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      gap: 12px;
+      overflow: visible;
+    }
+
+    .picto-label {
+      width: 56px;
+      padding-top: 10px;
+      font-size: var(--fs-body);
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .picto-label.top { color: var(--red); }
+    .picto-label.bottom { color: var(--blue); }
+
+    .picto-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      flex: 1;
+      min-width: 0;
+      min-height: 48px;
+      overflow: visible;
+      align-content: flex-start;
+    }
+
+    .picto-icons img {
+      width: 28px;
+      height: 48px;
+      object-fit: contain;
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+
+    .picto-row.top .picto-icons img { opacity: 0.7; filter: none; }
+    .picto-row.bottom .picto-icons img {
+      opacity: 0.85;
+      filter: brightness(1.2) sepia(0.3) hue-rotate(160deg) saturate(2);
+    }
+
+    .divider {
+      height: 1px;
+      background: #222;
+      margin: 24px 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: 380px; margin-bottom: 48px; }
+      .compare { grid-template-columns: 1fr; }
+      .map-section { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="hero-label">第一部分</p>
+        <h1 class="hero-title">作息内卷的地域分化</h1>
+        <p class="hero-sub">你的「拼尽全力」，他的「些许风霜」</p>
+      </div>
+    </header>
+
+    <section class="intro">
+      <p>由于课外教培机构锐减，<span class="hl-red">高三学生的在校作息时长</span>，是衡量学习强度与内卷程度的<span class="hl-red">核心指标</span>。</p>
+      <p>我们对全国 31 个省（区、市）的 3 所代表性高中进行抽样调查，获取了 2024-2025 学年高三学生的日均、周均在校时长数据。</p>
+    </section>
+
+    <section class="map-section">
+      <div>
+        <div class="map-wrap">
+          <div id="chart-map" role="img" aria-label="各省在校时长高考数据分布地图"></div>
+        </div>
+        <p class="map-caption">各省在校时长高考数据分布地图</p>
+      </div>
+      <div class="stats">
+        <ul>
+          <li>河北省以<span class="em-red">15.8 小时/天</span>的日均在校时长位居全国第一，相当于一周在校 6 天、每天近 16 小时。</li>
+          <li>河北省周均在校时长总数达<span class="em-red">94.8 小时</span>，而最低的青海省、北京市分别为<span class="em-blue">71.25 小时</span>和<span class="em-blue">74.06 小时</span>，差距超过 20 小时。</li>
+          <li>河北省学生每天比青海省、北京市学生多学习近 <span class="em-red">3 小时</span>。</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="compare">
+      <div class="col col-top">
+        <div class="col-title">
+          <span>内卷TOP5</span>
+          <img src="assets/emoji-sad.png" alt="" width="22" height="22" />
+        </div>
+        <p><span class="em">河北省</span>位居全国第一，普遍采用「衡水模式」，在校时间 <span class="em">5:30-23:00</span>，每月仅放 <span class="em">1-3 天</span>假。</p>
+        <p><span class="em">河南省、山东省</span>紧随其后，日均在校时长分别达到 <span class="em">15.7 小时</span>和 <span class="em">15.56 小时</span>，普遍实行每周单休、晚自习至 22:00。</p>
+        <p><span class="em">四川省、广东省</span>日均在校时长均超过 <span class="em">15 小时</span>，周均在校时长稳定在 <span class="em">90 小时</span>左右。</p>
+      </div>
+      <div class="col col-bottom">
+        <div class="col-title">
+          <span>内卷末5</span>
+          <img src="assets/emoji-wink.png" alt="" width="22" height="22" />
+        </div>
+        <p><span class="em">北京市、天津市、上海市</span>日均在校时长 <span class="em">低于 14 小时</span>，普遍实行双休，晚自习 <span class="em">20:30 前</span>结束。</p>
+        <p><span class="em">青海省、宁夏回族自治区</span>等西部省份，考生人数与北京市相当，但由于教育资源分布，在校时长低于全国平均水平。</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="picto-section">
+      <h2 class="picto-title">2024年各省高考报名人数前五/末五</h2>
+      <div class="picto-body">
+        <div id="picto-top"></div>
+        <div id="picto-bottom" style="margin-top: 12px;"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const PROVINCES = [
+      { province: "河北", daily: 15.8, weekly: 94.8 },
+      { province: "河南", daily: 15.7, weekly: 94.2 },
+      { province: "山东", daily: 15.56, weekly: 93.4 },
+      { province: "四川", daily: 15.23, weekly: 91.38 },
+      { province: "广东", daily: 15.1, weekly: 90.6 },
+      { province: "安徽", daily: 14.95, weekly: 89.7 },
+      { province: "浙江", daily: 14.93, weekly: 86.63 },
+      { province: "海南", daily: 14.9, weekly: 85.31 },
+      { province: "湖南", daily: 14.86, weekly: 89.2 },
+      { province: "山西", daily: 14.86, weekly: 88.66 },
+      { province: "湖北", daily: 14.83, weekly: 88.6 },
+      { province: "甘肃", daily: 14.8, weekly: 88.8 },
+      { province: "内蒙古", daily: 14.8, weekly: 88.8 },
+      { province: "广西", daily: 14.72, weekly: 88.32 },
+      { province: "江苏", daily: 14.66, weekly: 88 },
+      { province: "云南", daily: 14.6, weekly: 88 },
+      { province: "江西", daily: 14.53, weekly: 87.2 },
+      { province: "贵州", daily: 14.5, weekly: 87 },
+      { province: "陕西", daily: 14.5, weekly: 86.2 },
+      { province: "新疆", daily: 14.5, weekly: 87 },
+      { province: "黑龙江", daily: 14.36, weekly: 82.23 },
+      { province: "辽宁", daily: 14.26, weekly: 83.3 },
+      { province: "西藏", daily: 14.26, weekly: 75.61 },
+      { province: "宁夏", daily: 14.16, weekly: 77.91 },
+      { province: "上海", daily: 14.13, weekly: 82.71 },
+      { province: "福建", daily: 14.03, weekly: 81.9 },
+      { province: "吉林", daily: 14, weekly: 79 },
+      { province: "重庆", daily: 13.93, weekly: 83.6 },
+      { province: "天津", daily: 13.66, weekly: 78.1 },
+      { province: "北京", daily: 13.46, weekly: 74.06 },
+      { province: "青海", daily: 12.5, weekly: 71.25 }
+    ];
+
+    const GAOKAO = {
+      top5: [
+        { province: "河南", icons: 40 },
+        { province: "山东", icons: 35 },
+        { province: "河北", icons: 30 },
+        { province: "四川", icons: 25 },
+        { province: "广东", icons: 22 }
+      ],
+      bottom5: [
+        { province: "海南", icons: 3 },
+        { province: "北京", icons: 3 },
+        { province: "青海", icons: 2 },
+        { province: "上海", icons: 2 },
+        { province: "西藏", icons: 1 }
+      ]
+    };
+
+    function notifyParentResize() {
+      try {
+        const page = document.querySelector(".page");
+        const height = page
+          ? Math.ceil(page.getBoundingClientRect().top + page.offsetHeight)
+          : Math.ceil(document.body.scrollHeight);
+        window.parent.postMessage(
+          { type: "section-resize", section: "frame-part1", height },
+          "*"
+        );
+      } catch (_) {}
+    }
+
+    function renderPictogram(containerId, items, cssClass) {
+      const root = document.getElementById(containerId);
+      items.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = `picto-row ${cssClass}`;
+        const label = document.createElement("span");
+        label.className = `picto-label ${cssClass}`;
+        label.textContent = item.province;
+        const icons = document.createElement("div");
+        icons.className = "picto-icons";
+        for (let i = 0; i < item.icons; i++) {
+          const img = document.createElement("img");
+          img.src = "assets/person.png";
+          img.alt = "";
+          icons.appendChild(img);
+        }
+        row.appendChild(label);
+        row.appendChild(icons);
+        root.appendChild(row);
+      });
+    }
+
+    renderPictogram("picto-top", GAOKAO.top5, "top");
+    renderPictogram("picto-bottom", GAOKAO.bottom5, "bottom");
+    notifyParentResize();
+    window.addEventListener("load", notifyParentResize);
+    Array.from(document.images).forEach(function (img) {
+      if (!img.complete) img.addEventListener("load", notifyParentResize);
+    });
+    [80, 300, 1200].forEach(function (ms) {
+      setTimeout(notifyParentResize, ms);
+    });
+
+    const PROVINCE_SUFFIX = {
+      北京: "北京市", 天津: "天津市", 上海: "上海市", 重庆: "重庆市",
+      河北: "河北省", 山西: "山西省", 辽宁: "辽宁省", 吉林: "吉林省",
+      黑龙江: "黑龙江省", 江苏: "江苏省", 浙江: "浙江省", 安徽: "安徽省",
+      福建: "福建省", 江西: "江西省", 山东: "山东省", 河南: "河南省",
+      湖北: "湖北省", 湖南: "湖南省", 广东: "广东省", 海南: "海南省",
+      四川: "四川省", 贵州: "贵州省", 云南: "云南省", 陕西: "陕西省",
+      甘肃: "甘肃省", 青海: "青海省", 内蒙古: "内蒙古自治区",
+      广西: "广西壮族自治区", 西藏: "西藏自治区", 宁夏: "宁夏回族自治区",
+      新疆: "新疆维吾尔自治区",
+    };
+
+    function toGeoName(short) {
+      return PROVINCE_SUFFIX[short] || short + "省";
+    }
+
+    function initMapChart() {
+      const el = document.getElementById("chart-map");
+      if (!el || typeof echarts === "undefined") return;
+
+      const chart = echarts.init(el);
+      const data = PROVINCES.map((r) => ({
+        name: toGeoName(r.province),
+        value: r.daily,
+        weekly: r.weekly,
+      }));
+      const vals = data.map((d) => d.value);
+      const min = Math.min(...vals);
+      const max = Math.max(...vals);
+
+      function renderMap() {
+        chart.setOption({
+          backgroundColor: "transparent",
+          tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(20,20,20,0.92)",
+            borderColor: "#333",
+            textStyle: { color: "#eee", fontSize: 13 },
+            formatter: (p) => {
+              if (!p.data) return p.name;
+              return (
+                '<div style="font-weight:600;margin-bottom:6px">' + p.name + "</div>" +
+                "<div>日均在校时长：<b>" + p.data.value + "</b> 小时/天</div>" +
+                "<div>周均在校时长：<b>" + p.data.weekly + "</b> 小时</div>"
+              );
+            },
+          },
+          visualMap: {
+            show: false,
+            min,
+            max,
+            inRange: { color: ["#ffcccc", "#8b0000"] },
+          },
+          series: [
+            {
+              type: "map",
+              map: "china",
+              roam: false,
+              zoom: 1.15,
+              label: { show: false },
+              itemStyle: {
+                areaColor: "#2a2a2a",
+                borderColor: "#111",
+                borderWidth: 0.6,
+              },
+              emphasis: {
+                label: { show: true, color: "#fff", fontSize: 12 },
+                itemStyle: { areaColor: "#ff4d4f", borderColor: "#fff" },
+              },
+              data,
+            },
+          ],
+        });
+      }
+
+      fetch("https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json")
+        .then((r) => r.json())
+        .then((geo) => {
+          echarts.registerMap("china", geo);
+          renderMap();
+          notifyParentResize();
+        })
+        .catch(() => {
+          el.innerHTML =
+            '<p style="color:#666;text-align:center;padding:3rem;">地图数据加载失败，请检查网络后刷新</p>';
+        });
+
+      window.addEventListener("resize", () => chart.resize());
+    }
+
+    initMapChart();
+
+    window.PART1_DATA = { provinces: PROVINCES, gaokao: GAOKAO };
+  </script>
+</body>
+</html>
