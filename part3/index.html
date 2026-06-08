@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>第三部分 · 差异的底层逻辑</title>
+    <link rel="stylesheet" href="../shared-tokens.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/vendor/echarts.min.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <!-- Hero -->
+      <header class="hero">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="hero-label">第三部分</p>
+          <h1 class="hero-title">差异的底层逻辑</h1>
+          <p class="hero-subtitle">出生人口、高考报名人数与区域竞争格局</p>
+        </div>
+      </header>
+
+      <!-- Section 1: Birth vs Gaokao -->
+      <section class="section" id="demographic">
+        <div class="text-block">
+          <p>
+            按照 18 岁参加高考的常规逻辑，历年高考报名人数应与 18 年前的出生人口高度相关。数据显示，<span class="highlight-data">2000</span> 年全国出生人口 <span class="highlight-data">1778</span> 万人，对应 <span class="highlight-data">2018</span> 年高考报名人数 <span class="highlight-data">975</span> 万人；<span class="highlight-data">2007</span> 年出生人口 <span class="highlight-data">1594</span> 万人，对应 <span class="highlight-data">2035</span> 年高考报名人数 <span class="highlight-data">1335</span> 万人。
+          </p>
+        </div>
+
+        <div class="chart-wrap">
+          <div id="chart-birth" class="chart" role="img" aria-label="出生人口与高考报名人数趋势图"></div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot birth"></span>出生人口</span>
+            <span class="legend-item"><span class="legend-dot gaokao"></span>高考报名人数</span>
+          </div>
+        </div>
+
+        <div class="text-block">
+          <p>
+            <span class="highlight-data">2000-2017</span> 年，全国出生人口从 <span class="highlight-data">1778</span> 万人下降至 <span class="highlight-data">1594</span> 万人，降幅近 <span class="highlight-red">10%</span>
+          </p>
+          <p>
+            但对应年份的高考报名人数却从 <span class="highlight-data">975</span> 万人上涨至 <span class="highlight-data">1335</span> 万人，涨幅近 <span class="highlight-red">37%</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 2: Two factors -->
+      <section class="section" id="factors">
+        <p class="factor-intro">这一矛盾的核心，在于两个关键指标的变化：</p>
+
+        <div class="factor-row">
+          <div class="factor-text">
+            <p>
+              首先是<span class="highlight-red">高中入学率的持续上涨</span>。2018-2025 年，全国高中阶段毛入学率从 <span class="highlight-data">88.8%</span> 上涨至 <span class="highlight-data">92%</span>（数据来源：教育部门户网站），越来越多的初中毕业生进入高中，获得了参加高考的资格，直接扩大了高考报名人数的基数；
+            </p>
+          </div>
+          <div class="factor-img">
+            <img src="image/2.png" alt="拥挤的校园走廊" width="480" height="200" />
+          </div>
+        </div>
+
+        <div class="factor-row reverse">
+          <div class="factor-text">
+            <p>
+              然后是<span class="highlight-red">复读率的大幅提升</span>：2018-2025 年，全国高考复读生占比持续上升，部分高考大省的复读生占比甚至超过 <span class="highlight-data">25%</span>。越来越多的学生担心第一学历不足从而选择复读，进一步推高了历年高考报名人数，也加剧了各省高考的竞争激烈程度。
+            </p>
+          </div>
+          <div class="factor-img">
+            <img src="image/1.png" alt="深夜自习的教室" width="480" height="200" />
+          </div>
+        </div>
+
+        <div class="prediction-block">
+          <p>据预测</p>
+          <p><strong>2026-2035</strong> 年，全国高考报名人数仍将保持在 <strong>1340 万人</strong>以上的高位</p>
+          <p>高考竞争的激烈程度，在近 10 年内很难出现根本性缓解</p>
+        </div>
+      </section>
+
+      <!-- Section 3: Regional -->
+      <section class="section" id="regional">
+        <p class="regional-heading">
+          高考竞争的核心是省内排名为主<br />
+          <span class="highlight-red">高校于各省名额的分配不均</span>，是导致区域竞争格局固化、高考大省内卷加剧的核心原因
+        </p>
+
+        <div class="chart-wrap">
+          <div id="chart-province" class="chart chart-bar" role="img" aria-label="31省高考报名占比与985录取率对比"></div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#ffbb96"></span>高考报名人数占比</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#69c0ff"></span>985录取率</span>
+          </div>
+        </div>
+
+        <div class="analysis-text">
+          <p>
+            2024 年，全国 985 高校招生计划中，北京、天津、上海三个直辖市本身拥有的 985 高校资源共占全国近三分之一，而这三个直辖市的高考报名人数处于较低水平；与之相对的是，河南、河北、广东等高考人口大省 985 高校资源明显少于上述直辖市地区，呈现出明显的结构性问题。
+          </p>
+          <p>
+            高校资源的分配不均，也印证了各省高考录取难度的天差地别：北京市的 985 录取率，是河南省的 <span class="highlight-red">3.8 倍</span>、河北省的 <span class="highlight-red">4.4 倍</span>；天津市的 985 录取率，是山东省的 <span class="highlight-red">3.5 倍</span>、江西省的 <span class="highlight-red">6 倍</span>。
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 4: Conclusion -->
+      <section class="section conclusion" id="conclusion">
+        <div class="scale-visual">
+          <img class="scale-circle" src="image/3.png" alt="" />
+          <img class="scale-icon" src="image/4.png" alt="天平示意图" />
+        </div>
+        <div class="conclusion-text">
+          <p>
+            对于高考大省的学生来说，想要考上同一所 985 高校，省内排名需要进入 <span class="highlight-data">1%</span>，而直辖市的学生仅需进入前 <span class="highlight-data">5%</span>。这种录取难度的巨大差异，让高考大省的学生陷入了「我必须用更多的时间，才能弥合录取难度的差距」的内卷焦虑中。
+          </p>
+          <p>
+            最终形成了 <span class="vicious-cycle">「学习时长越卷，录取率越低，焦虑越严重，身心健康越差」</span> 的恶性循环。
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
